@@ -7,7 +7,8 @@ from keras.applications.inception_v3 import InceptionV3
 from keras.models import Model
 from keras.layers import Dense, GlobalAveragePooling2D
 import argparse
-import sys
+import matplotlib.pyplot as plt
+                                                                                
 
 
 argparser = argparse.ArgumentParser(description='parse args')
@@ -50,10 +51,16 @@ def main(args):
     dfdist = pd.DataFrame({'distance':dist})
     dfdist.sort_values('distance', ascending=True, inplace=True)
     ind=list(dfdist.index)[0]
-    return df.iloc[ind][0]
+    img = df.iloc[ind][0]
+    return img
 
 
 if __name__ == '__main__':
     args = argparser.parse_args()
-    f=main(args)
-    print(f)
+    imgpth=main(args)
+    imgpth = str('.')+imgpth
+    print('similar image path is : '+ imgpth)
+    image= cv2.imread(imgpth)
+    image =cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    cv2.imshow('image',image)
+    cv2.waitKey()
